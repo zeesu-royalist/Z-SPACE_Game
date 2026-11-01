@@ -12,7 +12,7 @@
  */
 
 export const EARTH_CONFIG = {
-  // Daylight Sky & Atmosphere
+  // Daytime Sky & Atmosphere
   sky: {
     skyColor: '#7ec0ee',
     horizonColor: '#cce6ff',
@@ -78,15 +78,56 @@ export const EARTH_CONFIG = {
     ],
   },
 
-  // Space for backward compatibility
-  space: {
-    backgroundColor: '#7ec0ee',
-  },
-
   // Camera settings matching the reference image's elevated high-angle perspective
   camera: {
     position: [11.5, 14.5, 18.5] as [number, number, number],
     target: [0, 5.5, 0] as [number, number, number],
     fov: 45,
+  },
+
+  // Backward compatibility fields for legacy Earth globe/environment components
+  planet: {
+    radius: 16,
+    position: [0, -16, 0] as [number, number, number],
+    rotationSpeed: 0.02,
+    oceanColor: '#1e3a8a',
+    oceanRoughness: 0.25,
+    oceanMetalness: 0.1,
+    cloudRadiusOffset: 0.15,
+    cloudRotationSpeed: 0.035,
+    atmosphereRadiusOffset: 0.45,
+    atmosphereColor: '#60a5fa',
+    atmosphereOpacity: 0.15,
+  },
+
+  launchSite: {
+    position: [0, 0, 0] as [number, number, number],
+    padRadius: 3.6,
+    padHeight: 0.2,
+    terrainRadius: 10,
+    terrainHeight: 0.4,
+    padColor: '#334155',
+    padAccentColor: '#0284c7',
+    hazardColor: '#eab308',
+    terrainColor: '#1e3a2f',
+  },
+
+  lighting: {
+    sunPosition: [16, 24, 14] as [number, number, number],
+    sunColor: '#fffbeb',
+    sunIntensity: 1.8,
+    ambientColor: '#bfdbfe',
+    ambientIntensity: 0.45,
+    rimLightPosition: [-15, -10, -15] as [number, number, number],
+    rimLightColor: '#3b82f6',
+    rimLightIntensity: 0.6,
+  },
+
+  space: {
+    backgroundColor: '#7ec0ee',
+    starsCount: 2500,
+    starsRadius: 90,
+    starsDepth: 40,
+    starsSpeed: 0.3,
   },
 } as const;

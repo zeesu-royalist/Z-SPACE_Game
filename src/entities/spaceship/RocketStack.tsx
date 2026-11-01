@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import * as THREE from 'three';
 
 export interface RocketStackProps {
   position?: [number, number, number];

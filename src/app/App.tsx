@@ -71,22 +71,25 @@ export default function App() {
       case 'travel':
         return {
           position: TRAVEL_CONFIG.camera.position,
+          target: [0, 0, 0] as [number, number, number],
           fov: TRAVEL_CONFIG.camera.fov,
         };
       case 'moon':
         return {
           position: MOON_CONFIG.camera.position,
+          target: MOON_CONFIG.camera.target,
           fov: MOON_CONFIG.camera.fov,
         };
       default:
         return {
           position: EARTH_CONFIG.camera.position,
+          target: EARTH_CONFIG.camera.target,
           fov: EARTH_CONFIG.camera.fov,
         };
     }
   };
 
-  const { position: cameraPosition, fov: cameraFov } = getCameraSettings();
+  const { position: cameraPosition, target: cameraTarget, fov: cameraFov } = getCameraSettings();
 
   // Handle fuel quantity change before launch
   const handleFuelChange = (newFuel: number) => {
@@ -200,6 +203,7 @@ export default function App() {
       <GameCanvas
         key={activeView}
         cameraPosition={cameraPosition}
+        cameraTarget={cameraTarget}
         cameraFov={cameraFov}
         enableOrbitControls={activeView === 'earth' && launchStage === 'ready'}
       >

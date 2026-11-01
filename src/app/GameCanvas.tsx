@@ -6,6 +6,7 @@ import BasicScene from './BasicScene';
 interface GameCanvasProps {
   children?: React.ReactNode;
   cameraPosition?: [number, number, number];
+  cameraTarget?: [number, number, number];
   cameraFov?: number;
   enableOrbitControls?: boolean;
 }
@@ -16,8 +17,9 @@ interface GameCanvasProps {
  */
 export default function GameCanvas({
   children,
-  cameraPosition = [0, 4.5, 9.5],
-  cameraFov = 48,
+  cameraPosition = [11.5, 14.5, 18.5],
+  cameraTarget = [0, 5.5, 0],
+  cameraFov = 45,
   enableOrbitControls = true,
 }: GameCanvasProps) {
   return (
@@ -33,11 +35,12 @@ export default function GameCanvas({
           {enableOrbitControls && (
             <OrbitControls
               makeDefault
+              target={cameraTarget}
               enableDamping
               dampingFactor={0.05}
-              minDistance={3}
-              maxDistance={35}
-              maxPolarAngle={Math.PI / 2 + 0.15}
+              minDistance={4}
+              maxDistance={55}
+              maxPolarAngle={Math.PI / 2 - 0.04}
             />
           )}
         </Suspense>

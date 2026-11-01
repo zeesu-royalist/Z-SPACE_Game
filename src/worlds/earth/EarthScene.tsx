@@ -1,6 +1,4 @@
-import { EARTH_CONFIG } from './earth.config';
-import EarthPlanet from './EarthPlanet';
-import EarthEnvironment from './EarthEnvironment';
+import SpaceportEnvironment from './SpaceportEnvironment';
 import LaunchController from '../../systems/launch/LaunchController';
 import type { LaunchStage } from '../../systems/launch/launch.config';
 
@@ -11,11 +9,14 @@ export interface EarthSceneProps {
 }
 
 /**
- * EarthScene composites the entire Earth world:
- * - Deep space background
- * - The large stylized procedural Earth globe
- * - The surface launch environment (launch pad, terrain, gantry, rocks, lighting)
- * - The animated Spaceship LaunchController stationed on the launchpad
+ * EarthScene composites the authentic ground-level space center launch facility:
+ * - Sunny daytime blue sky & drifting clouds
+ * - Vast green spaceport landscape with runways and access roads
+ * - Massive elevated concrete launch pad with flame trench deflector ramps and yellow "01" marking
+ * - Steel Mobile Launcher Table with safety railings
+ * - Tall umbilical gantry service tower with catwalks and lightning mast
+ * - Cryogenic storage spheres, perimeter trees, and floodlight towers
+ * - Heavy-lift Space Shuttle / SLS Rocket Stack with LaunchController
  */
 export default function EarthScene({
   launchStage = 'ready',
@@ -24,16 +25,10 @@ export default function EarthScene({
 }: EarthSceneProps) {
   return (
     <group>
-      {/* Space skybox background color */}
-      <color attach="background" args={[EARTH_CONFIG.space.backgroundColor]} />
+      {/* Complete Realistic Earth Ground Spaceport Environment */}
+      <SpaceportEnvironment />
 
-      {/* Stylized Earth Planet Globe with procedural continents, rotating clouds, and glow */}
-      <EarthPlanet />
-
-      {/* Surface Launch Facility Environment */}
-      <EarthEnvironment />
-
-      {/* Spaceship Launch Controller (Idle / Countdown / Ignition / Liftoff / Complete) */}
+      {/* Heavy-Lift Rocket Launch Controller (Idle / Countdown / Ignition / Liftoff / Complete) */}
       <LaunchController
         launchStage={launchStage}
         onStageChange={onLaunchStageChange}

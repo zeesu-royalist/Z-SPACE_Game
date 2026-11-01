@@ -36,9 +36,45 @@ interface StatusOverlayProps {
 }
 
 /**
+ * Green 4-petal space agency cloverleaf icon directly inspired by the reference image.
+ */
+function AgencyCloverIcon({ className = 'w-9 h-9' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 100 100" className={`${className} filter drop-shadow-md`}>
+      {/* Top petal */}
+      <path
+        d="M 50 8 C 34 8, 26 22, 28 38 C 30 48, 42 50, 50 50 C 58 50, 70 48, 72 38 C 74 22, 66 8, 50 8 Z"
+        className="fill-emerald-500"
+      />
+      {/* Bottom petal */}
+      <path
+        d="M 50 92 C 34 92, 26 78, 28 62 C 30 52, 42 50, 50 50 C 58 50, 70 52, 72 62 C 74 78, 66 92, 50 92 Z"
+        className="fill-emerald-500"
+      />
+      {/* Left petal */}
+      <path
+        d="M 8 50 C 8 34, 22 26, 38 28 C 48 30, 50 42, 50 50 C 50 58, 48 70, 38 72 C 22 74, 8 66, 8 50 Z"
+        className="fill-emerald-500"
+      />
+      {/* Right petal */}
+      <path
+        d="M 92 50 C 92 34, 78 26, 62 28 C 52 30, 50 42, 50 50 C 50 58, 52 70, 62 72 C 78 74, 92 66, 92 50 Z"
+        className="fill-emerald-500"
+      />
+      {/* Center diamond cutout highlight */}
+      <polygon points="50,42 58,50 50,58 42,50" className="fill-white/80" />
+    </svg>
+  );
+}
+
+/**
  * StatusOverlay manages the HUD across Earth, Space Travel, and Moon views.
- * Displays fuel planning, launch countdowns, space transit telemetry,
- * Lunar Rover driving telemetry & battery monitor, and the Step 13 Moon Navigation System.
+ * Features:
+ * - Top-center BETA badge from reference image
+ * - Top-left Green 4-petal Agency Clover logo from reference image
+ * - Right-hand "Build Your First Rocket" mission control card on Earth
+ * - Space Transit telemetry HUD
+ * - Moon Telemetry, Lunar Rover Battery, and Navigation locator
  */
 export default function StatusOverlay({
   activeView,
@@ -82,13 +118,13 @@ export default function StatusOverlay({
         case 'countdown':
           return `COUNTDOWN: T-${countdownNumber ?? 3}`;
         case 'ignition':
-          return 'ENGINE IGNITION';
+          return 'ENGINE IGNITION · FLAME TRENCH FIRING';
         case 'liftoff':
-          return 'LIFTOFF IN PROGRESS';
+          return 'LIFTOFF · ASCENDING FROM PAD 01';
         case 'complete':
-          return 'LAUNCH COMPLETE · READY TO TRAVEL';
+          return 'ORBIT ACHIEVED · READY TO TRAVEL TO MOON';
         default:
-          return 'Spaceship Parked on Launchpad';
+          return 'Launch Complex Pad 01 · Rocket Ready';
       }
     }
     // Moon view
@@ -110,208 +146,209 @@ export default function StatusOverlay({
 
   return (
     <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 md:p-6 select-none overflow-hidden">
+      {/* Top Center Subtle "BETA" Badge (Featured in Reference Image) */}
+      <div className="pointer-events-none absolute top-3 sm:top-4 left-1/2 -translate-x-1/2 z-20">
+        <span className="text-xs sm:text-sm font-semibold tracking-[0.35em] text-white/85 uppercase bg-slate-900/40 backdrop-blur-xs px-3.5 py-0.5 rounded-full border border-white/20 shadow-sm">
+          BETA
+        </span>
+      </div>
+
       {/* Top Header */}
-      <header className="flex flex-wrap items-center justify-between gap-3">
-        {/* Title */}
-        <div>
-          <h1 className="text-xl md:text-2xl font-bold tracking-widest text-sky-400 drop-shadow">
-            Z-SPACE
-          </h1>
-          <p className="text-xs text-slate-400 font-mono tracking-wider">
-            {activeView === 'travel'
-              ? 'STEP 13 · SPACE TRANSIT'
-              : activeView === 'earth'
-              ? 'STEP 13 · EARTH LAUNCHPAD'
-              : 'STEP 13 · MOON NAVIGATION'}
-          </p>
+      <header className="flex flex-wrap items-center justify-between gap-3 relative z-10">
+        {/* Title & Agency Green Clover Logo (from Reference Image) */}
+        <div className="flex items-center gap-2.5">
+          <AgencyCloverIcon className="w-8 h-8 sm:w-10 sm:h-10" />
+          <div>
+            <h1 className="text-xl md:text-2xl font-bold tracking-widest text-sky-400 drop-shadow flex items-center gap-2">
+              <span>Z-SPACE</span>
+            </h1>
+            <p className="text-[11px] text-slate-300 font-mono tracking-wider drop-shadow-sm">
+              {activeView === 'travel'
+                ? 'SPACE TRANSIT · EARTH TO MOON'
+                : activeView === 'earth'
+                ? 'SPACEPORT LAUNCHPAD 01'
+                : 'MOON BASE ALPHA'}
+            </p>
+          </div>
         </div>
 
-        {/* Development Scene Switcher (Pointer events enabled) */}
-        <div className="pointer-events-auto flex items-center bg-slate-900/90 backdrop-blur-md border border-slate-700/70 p-1 rounded-xl shadow-xl">
-          <button
-            type="button"
-            onClick={() => onSelectView('earth')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 cursor-pointer ${
-              activeView === 'earth'
-                ? 'bg-sky-500 text-white shadow-md shadow-sky-500/40 ring-1 ring-sky-300'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800'
-            }`}
-          >
-            🌍 EARTH
-          </button>
-
-          {travelStage === 'traveling' && (
+        {/* Center / Right Controls Header */}
+        <div className="flex items-center gap-3">
+          {/* Development Scene Switcher (Pointer events enabled) */}
+          <div className="pointer-events-auto flex items-center bg-slate-900/90 backdrop-blur-md border border-slate-700/70 p-1 rounded-xl shadow-xl">
             <button
               type="button"
-              onClick={() => onSelectView('travel')}
+              onClick={() => onSelectView('earth')}
               className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 cursor-pointer ${
-                activeView === 'travel'
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/40 ring-1 ring-indigo-300'
+                activeView === 'earth'
+                  ? 'bg-sky-500 text-white shadow-md shadow-sky-500/40 ring-1 ring-sky-300'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
               }`}
             >
-              🚀 TRAVEL
+              🌍 EARTH
             </button>
-          )}
 
-          <button
-            type="button"
-            onClick={() => onSelectView('moon')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 cursor-pointer ${
-              activeView === 'moon'
-                ? 'bg-zinc-100 text-slate-900 shadow-md shadow-zinc-100/30 ring-1 ring-white'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800'
-            }`}
-          >
-            🌑 MOON
-          </button>
-        </div>
+            {travelStage === 'traveling' && (
+              <button
+                type="button"
+                onClick={() => onSelectView('travel')}
+                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 cursor-pointer ${
+                  activeView === 'travel'
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/40 ring-1 ring-indigo-300'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                🚀 TRAVEL
+              </button>
+            )}
 
-        {/* Status Indicators & Badges */}
-        <div className="flex items-center gap-2">
-          {/* Moon Telemetry Pills */}
-          {activeView === 'moon' && (
-            <>
-              {/* Controls Badge */}
-              {isRoverOccupied ? (
-                <div className="hidden sm:flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-sm border border-amber-500/40 px-2.5 py-1 rounded-full shadow-md">
-                  <span className="text-[10px] bg-slate-800 border border-slate-700 text-amber-400 font-mono px-1.5 py-0.5 rounded font-bold">
-                    WASD
-                  </span>
-                  <span className="text-slate-500 text-xs">/</span>
-                  <span className="text-[10px] bg-slate-800 border border-slate-700 text-amber-400 font-mono px-1.5 py-0.5 rounded font-bold">
-                    ARROWS
-                  </span>
-                  <span className="text-xs font-semibold text-amber-300 ml-0.5">
-                    DRIVE
-                  </span>
-                  <span className="text-slate-600">|</span>
-                  <span className="text-[10px] bg-slate-800 border border-slate-700 text-amber-400 font-mono px-1.5 py-0.5 rounded font-bold">
-                    E
-                  </span>
-                  <span className="text-xs font-semibold text-amber-300">
-                    EXIT
-                  </span>
-                </div>
-              ) : (
-                <div className="hidden sm:flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-sm border border-sky-500/40 px-2.5 py-1 rounded-full shadow-md">
-                  <span className="text-[10px] bg-slate-800 border border-slate-700 text-sky-400 font-mono px-1.5 py-0.5 rounded font-bold">
-                    WASD
-                  </span>
-                  <span className="text-slate-500 text-xs">/</span>
-                  <span className="text-[10px] bg-slate-800 border border-slate-700 text-sky-400 font-mono px-1.5 py-0.5 rounded font-bold">
-                    ARROWS
-                  </span>
-                  <span className="text-xs font-semibold text-slate-300 ml-0.5">
-                    MOVE
-                  </span>
-                  {canEnterRover && (
-                    <>
-                      <span className="text-slate-600">|</span>
-                      <span className="text-[10px] bg-slate-800 border border-emerald-500 text-emerald-400 font-mono px-1.5 py-0.5 rounded font-bold">
-                        E
-                      </span>
-                      <span className="text-xs font-semibold text-emerald-300">
-                        ENTER
-                      </span>
-                    </>
-                  )}
-                </div>
-              )}
+            <button
+              type="button"
+              onClick={() => onSelectView('moon')}
+              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 cursor-pointer ${
+                activeView === 'moon'
+                  ? 'bg-zinc-100 text-slate-900 shadow-md shadow-zinc-100/30 ring-1 ring-white'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-800'
+              }`}
+            >
+              🌑 MOON
+            </button>
+          </div>
 
-              {/* Navigation Distance Pill */}
-              {navigationTelemetry && (
-                <div className="flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-sm border border-cyan-500/40 px-2.5 py-1 rounded-full shadow-md font-mono text-xs">
-                  <span className="text-cyan-400 text-xs">🧭</span>
-                  <span className="font-bold text-cyan-300">
-                    {navigationTelemetry.isNearby
-                      ? 'NEARBY'
-                      : `${navigationTelemetry.distance.toFixed(1)}u`}
-                  </span>
-                  <span className="text-slate-400 text-[10px]">
-                    {navigationTelemetry.cardinalDirection}
-                  </span>
-                </div>
-              )}
+          {/* Status Indicators & Badges */}
+          <div className="hidden sm:flex items-center gap-2">
+            {/* Moon Telemetry Pills */}
+            {activeView === 'moon' && (
+              <>
+                {/* Controls Badge */}
+                {isRoverOccupied ? (
+                  <div className="flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-sm border border-amber-500/40 px-2.5 py-1 rounded-full shadow-md">
+                    <span className="text-[10px] bg-slate-800 border border-slate-700 text-amber-400 font-mono px-1.5 py-0.5 rounded font-bold">
+                      WASD
+                    </span>
+                    <span className="text-slate-500 text-xs">/</span>
+                    <span className="text-[10px] bg-slate-800 border border-slate-700 text-amber-400 font-mono px-1.5 py-0.5 rounded font-bold">
+                      ARROWS
+                    </span>
+                    <span className="text-xs font-semibold text-amber-300 ml-0.5">
+                      DRIVE
+                    </span>
+                    <span className="text-slate-600">|</span>
+                    <span className="text-[10px] bg-slate-800 border border-slate-700 text-amber-400 font-mono px-1.5 py-0.5 rounded font-bold">
+                      E
+                    </span>
+                    <span className="text-xs font-semibold text-amber-300">
+                      EXIT
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-sm border border-sky-500/40 px-2.5 py-1 rounded-full shadow-md">
+                    <span className="text-[10px] bg-slate-800 border border-slate-700 text-sky-400 font-mono px-1.5 py-0.5 rounded font-bold">
+                      WASD
+                    </span>
+                    <span className="text-slate-500 text-xs">/</span>
+                    <span className="text-[10px] bg-slate-800 border border-slate-700 text-sky-400 font-mono px-1.5 py-0.5 rounded font-bold">
+                      ARROWS
+                    </span>
+                    <span className="text-xs font-semibold text-slate-300 ml-0.5">
+                      MOVE
+                    </span>
+                    {canEnterRover && (
+                      <>
+                        <span className="text-slate-600">|</span>
+                        <span className="text-[10px] bg-slate-800 border border-emerald-500 text-emerald-400 font-mono px-1.5 py-0.5 rounded font-bold">
+                          E
+                        </span>
+                        <span className="text-xs font-semibold text-emerald-300">
+                          ENTER
+                        </span>
+                      </>
+                    )}
+                  </div>
+                )}
 
-              {/* Rover Battery Gauge Pill */}
-              <div className="flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-sm border border-slate-700/80 px-2.5 py-1 rounded-full shadow-md font-mono text-xs">
-                <span className="text-xs">⚡</span>
-                <div className="w-12 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700/50">
-                  <div
-                    className={`h-full transition-all duration-200 ${
+                {/* Navigation Distance Pill */}
+                {navigationTelemetry && (
+                  <div className="flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-sm border border-cyan-500/40 px-2.5 py-1 rounded-full shadow-md font-mono text-xs">
+                    <span className="text-cyan-400 text-xs">🧭</span>
+                    <span className="font-bold text-cyan-300">
+                      {navigationTelemetry.isNearby
+                        ? 'NEARBY'
+                        : `${navigationTelemetry.distance.toFixed(1)}u`}
+                    </span>
+                    <span className="text-slate-400 text-[10px]">
+                      {navigationTelemetry.cardinalDirection}
+                    </span>
+                  </div>
+                )}
+
+                {/* Rover Battery Gauge Pill */}
+                <div className="flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-sm border border-slate-700/80 px-2.5 py-1 rounded-full shadow-md font-mono text-xs">
+                  <span className="text-xs">⚡</span>
+                  <div className="w-12 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700/50">
+                    <div
+                      className={`h-full transition-all duration-200 ${
+                        batteryAnalysis.status === 'empty'
+                          ? 'bg-rose-500'
+                          : batteryAnalysis.status === 'low'
+                          ? 'bg-amber-400 animate-pulse'
+                          : 'bg-emerald-400'
+                      }`}
+                      style={{ width: `${batteryAnalysis.percentage}%` }}
+                    />
+                  </div>
+                  <span
+                    className={`font-bold text-[11px] ${
                       batteryAnalysis.status === 'empty'
-                        ? 'bg-rose-500'
+                        ? 'text-rose-400'
                         : batteryAnalysis.status === 'low'
-                        ? 'bg-amber-400 animate-pulse'
-                        : 'bg-emerald-400'
+                        ? 'text-amber-400'
+                        : 'text-emerald-400'
                     }`}
-                    style={{ width: `${batteryAnalysis.percentage}%` }}
-                  />
+                  >
+                    {batteryAnalysis.percentage}%
+                  </span>
                 </div>
-                <span
-                  className={`font-bold text-[11px] ${
-                    batteryAnalysis.status === 'empty'
-                      ? 'text-rose-400'
-                      : batteryAnalysis.status === 'low'
-                      ? 'text-amber-400'
-                      : 'text-emerald-400'
-                  }`}
-                >
-                  {batteryAnalysis.percentage}%
-                </span>
-              </div>
-            </>
-          )}
+              </>
+            )}
 
-          {/* Current Status Badge */}
-          <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-sm border border-slate-700/60 rounded-full px-3 py-1.5 shadow-md">
-            <span className="relative flex h-2 w-2">
-              <span
-                className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                  activeView === 'travel'
-                    ? 'bg-sky-400'
-                    : launchStage === 'liftoff' || launchStage === 'ignition'
-                    ? 'bg-amber-400'
-                    : navigationTelemetry?.isNearby
-                    ? 'bg-cyan-400'
-                    : isRoverOccupied
-                    ? 'bg-amber-400'
-                    : 'bg-emerald-400'
-                }`}
-              ></span>
-              <span
-                className={`relative inline-flex rounded-full h-2 w-2 ${
-                  activeView === 'travel'
-                    ? 'bg-sky-500'
-                    : launchStage === 'liftoff' || launchStage === 'ignition'
-                    ? 'bg-amber-500'
-                    : navigationTelemetry?.isNearby
-                    ? 'bg-cyan-400'
-                    : isRoverOccupied
-                    ? 'bg-amber-500'
-                    : 'bg-emerald-500'
-                }`}
-              ></span>
-            </span>
-            <span className="text-xs font-medium text-emerald-300">
-              {getStatusText()}
-            </span>
+            {/* Current Status Badge */}
+            <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-sm border border-slate-700/60 rounded-full px-3 py-1.5 shadow-md">
+              <span className="relative flex h-2 w-2">
+                <span
+                  className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                    activeView === 'travel'
+                      ? 'bg-sky-400'
+                      : launchStage === 'liftoff' || launchStage === 'ignition'
+                      ? 'bg-amber-400'
+                      : navigationTelemetry?.isNearby
+                      ? 'bg-cyan-400'
+                      : isRoverOccupied
+                      ? 'bg-amber-400'
+                      : 'bg-emerald-400'
+                  }`}
+                ></span>
+                <span
+                  className={`relative inline-flex rounded-full h-2 w-2 ${
+                    activeView === 'travel'
+                      ? 'bg-sky-500'
+                      : launchStage === 'liftoff' || launchStage === 'ignition'
+                      ? 'bg-amber-500'
+                      : navigationTelemetry?.isNearby
+                      ? 'bg-cyan-400'
+                      : isRoverOccupied
+                      ? 'bg-amber-500'
+                      : 'bg-emerald-500'
+                  }`}
+                ></span>
+              </span>
+              <span className="text-xs font-medium text-emerald-300">
+                {getStatusText()}
+              </span>
+            </div>
           </div>
         </div>
       </header>
-
-      {/* Cinematic Center Countdown on Earth */}
-      {activeView === 'earth' && launchStage === 'countdown' && (
-        <div className="self-center my-auto flex flex-col items-center animate-bounce">
-          <div className="text-6xl sm:text-7xl font-extrabold font-mono text-amber-300 drop-shadow-[0_0_25px_rgba(251,191,36,0.6)]">
-            {countdownNumber ?? 3}
-          </div>
-          <span className="text-xs font-mono font-bold tracking-widest text-amber-200 mt-2 bg-slate-900/80 px-4 py-1 rounded-full border border-amber-500/40">
-            PRE-LAUNCH COUNTDOWN
-          </span>
-        </div>
-      )}
 
       {/* Center Flight Telemetry HUD during Space Travel */}
       {activeView === 'travel' && (
@@ -354,9 +391,9 @@ export default function StatusOverlay({
         </div>
       )}
 
-      {/* Left Mid Section: Earth Fuel & Launch Planning Panel */}
+      {/* Earth View: Right Side "Build Your First Rocket" Mission Card (Exactly like Reference Image) */}
       {activeView === 'earth' && (
-        <div className="flex-1 flex items-center justify-start my-2 py-1 overflow-y-auto max-h-[calc(100vh-140px)]">
+        <div className="flex-1 flex items-center justify-end my-2 py-1 overflow-y-auto max-h-[calc(100vh-140px)] pr-1 sm:pr-4">
           <div className="my-auto">
             <FuelPanel
               selectedFuel={selectedFuel}
@@ -666,8 +703,8 @@ export default function StatusOverlay({
             ? 'Space transit in progress · Moon is approaching · Spaceship cruising at speed'
             : activeView === 'earth'
             ? launchStage === 'complete'
-              ? 'Spaceship ready in orbit · Click TRAVEL TO MOON on the left'
-              : 'Pre-flight preparation on Earth · Load ≥140 units and launch'
+              ? 'Rocket ready in orbit · Click TRAVEL TO MOON on the right'
+              : 'Spaceport Launchpad 01 · Heavy-lift Shuttle Stack on Mobile Launcher · Click LAUNCH ROCKET'
             : isRoverOccupied
             ? 'Driving Lunar Rover · 3D cyan arrow points to Moon landing site · Press [E] to exit rover'
             : canEnterRover
